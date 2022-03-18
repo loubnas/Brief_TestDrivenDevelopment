@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -31,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static net.bytebuddy.matcher.ElementMatchers.is;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -79,16 +81,31 @@ class ClientControllerMockTest {
 
     @Test
     void getAll() throws Exception {
-        List<ClientDto> clts = new ArrayList<>();
-        clts.add(new ClientDto());
-        clts.add(new ClientDto());
+        List<ClientDto> list = new ArrayList<>();
 
-        when(clientService.getAllClients(0,1)).thenReturn(clts);
+        ClientDto clt= new ClientDto();
+        clt.setSex("femme");
+        clt.setEmail("loubna@gmail.com");
+        clt.setIsActive(true);
+        clt.setFullname("loubna soussi");
+
+        ClientDto l= new ClientDto();
+        l.setSex("homme");
+        l.setEmail("ahmed@gmail.com");
+        l.setIsActive(true);
+        l.setFullname("ahmed ahmed");
+
+       list.add(clt);
+       list.add(l);
+
+        when(clientService.getAllClients(0,1)).thenReturn(list);
+
 
         mockMvc.perform(get("/clients/")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .content("page=0&limit=1"))
                 .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$" ,hasSize(2)))
                 .andDo(MockMvcResultHandlers.print()).andReturn();
     }
 

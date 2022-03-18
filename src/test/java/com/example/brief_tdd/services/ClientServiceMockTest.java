@@ -143,8 +143,6 @@ public class ClientServiceMockTest {
 
         ClientEntity cl=clientMapping.convertToEntity(l,ClientEntity.class);
 
-        //when(clientRepository.findById(anyLong())).thenReturn(cl);
-
         when(clientMapping.convertToDto(cl,ClientDto.class)).thenReturn(l);
         when(clientService.updateClient(l)).thenReturn(l);
         ClientDto clt=clientService.updateClient(l);
