@@ -18,4 +18,6 @@ public class ClientDto {
     private int age;
     private String sex;
     private Boolean isActive;
+
+
 }

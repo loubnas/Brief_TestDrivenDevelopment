@@ -6,23 +6,28 @@ import com.example.brief_tdd.entities.ClientEntity;
 import com.example.brief_tdd.repositories.ClientRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 
-@RunWith(MockitoJUnitRunner.class)
-@SpringBootTest
+//@WebMvcTest(ClientServiceTest.class)
+@ExtendWith(MockitoExtension.class)
+//@SpringBootTest
 public class ClientServiceMockTest {
+
 
     @InjectMocks
     ClientService clientService;
@@ -30,6 +35,7 @@ public class ClientServiceMockTest {
     IMapClassWithDto<ClientEntity, ClientDto> clientMapping;
     @Mock
     ClientRepository clientRepository;
+
 
     @BeforeEach
     void setUp() {
@@ -126,7 +132,7 @@ public class ClientServiceMockTest {
     @Test
     void updateClient() {
         ClientDto l = new ClientDto();
-        l.setId(9L);
+        l.setId(2L);
         l.setEmail("abc@gmail.com");
         l.setPhone("+2120046399");
         l.setFullname("HAHA");
@@ -137,7 +143,7 @@ public class ClientServiceMockTest {
 
         ClientEntity cl=clientMapping.convertToEntity(l,ClientEntity.class);
 
-        when(clientRepository.findById(anyLong())).thenReturn(cl);
+        //when(clientRepository.findById(anyLong())).thenReturn(cl);
 
         when(clientMapping.convertToDto(cl,ClientDto.class)).thenReturn(l);
         when(clientService.updateClient(l)).thenReturn(l);
@@ -148,7 +154,19 @@ public class ClientServiceMockTest {
     // -- test delete
 
     @Test
-    void deleteClient() {
+    void deleteClient()  throws  Exception{
+        ClientDto c=new ClientDto();
+        c.setId(2L);
+        c.setEmail("abc@gmail.com");
+        c.setPhone("+2120046399");
+        c.setFullname("HAHA");
+        clientService.deleteClient(c.getId());
+
     }
+
+
+
+
+
 }
 
